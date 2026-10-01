@@ -51,23 +51,12 @@ CNN/LSTMを用いた取引履歴（時系列パターン）のモデリングや
  | 豊富な文脈情報を含むため、ディープラーニングやアンサンブル学習、特徴量エンジニアリングの評価に使用。 | [[https://www.kaggle.com/competitions/ieee-fraud-detection/data](https://www.kaggle.com/competitions/ieee-fraud-detection/data)<br> ](https://www.kaggle.com/competitions/ieee-fraud-detection/data)|
 | PaySim | モバイルマネーサービスの実際の実績をベースにした合成（シミュレーション）取引データ。 | 6,362,620件(不正率 〜0.129%)
  | 大規模取引環境におけるスケーラビリティや強化学習・コスト考慮型モデルのシミュレーション評価で使用。
-
- | [https://www.kaggle.com/datasets/ealaxi/paysim1](https://www.kaggle.com/datasets/ealaxi/paysim1)<br> |
+ | [https://www.kaggle.com/datasets/ealaxi/paysim1](https://www.kaggle.com/datasets/ealaxi/paysim1)|
 | Credit Card Fraud Detection 2023 | 2023年の欧州クレジットカード取引データ（バランス調整済みの実験をサポート）。
-
- | 568,630件<br>
-
-<br>(不正率 50%)
-
+ | 568,630件(不正率 50%)
  | 最新の取引パターンに対するアンサンブル学習やディープニューラルネットワークの評価に使用。
-
  | [https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)<br> |
 | Elliptic Bitcoin Dataset | ビットコインの取引ネットワーク（ノード＝取引、エッジ＝BTCの流れていく関係）。
-
- | 203,769ノード<br>
-
-<br>(不正率 〜2.05%)
-
+ | 203,769ノード(不正率 〜2.05%)
  | 取引の「グラフ構造（ネットワーク関係）」を活かしたGNNや暗号資産の不正追跡モデルの検証に使用。
-
  | [https://www.kaggle.com/datasets/ellipticco/elliptic-data-set](https://www.kaggle.com/datasets/ellipticco/elliptic-data-set)<br> |
