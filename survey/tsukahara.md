@@ -1,10 +1,10 @@
 # サーベイ論文まとめ（tsukahara）
 
 ## 論文の情報
-- 分野：（①テキスト分類・感情分析 / ②画像分類・物体認識 / ③推薦システム / ④SNS・ネットワーク分析 / ⑤時系列・異常検知 から選ぶ）
-- タイトル：
+- 分野：④SNS・ネットワーク分析
+- タイトル：Community Detection Algorithms in Healthcare Applications: A Systematic Review
 - 著者・年：
-- URL / DOI：
+- URL / DOI：https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10078397
 
 ## 1. 論文の要約
 - 
