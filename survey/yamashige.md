@@ -42,6 +42,32 @@ CNN/LSTMを用いた取引履歴（時系列パターン）のモデリングや
 ## 4. よく使われる信頼性のあるデータセット
 論文の中で実際に使われているものを書く。
 
+
 | データセット名 | 中身 | 規模 | 論文での使われ方 | 入手先（URL） |
 | --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+| Fraud Dataset Benchmark (FDB) | カード不正・悪意あるWebトラフィック・ボット検知・ローンデフォルトなどを集約した標準化ベンチマーク[cite: 10]。 | 複数データセットの集合[cite: 11] | データローダーや評価プロトコルが統一されており、タスクを跨いだMLモデルの体系的な比較評価に使用[cite: 10]。| GitHub (FDB)[cite: 37]https://github.com/amazon-science/fraud-dataset-benchmark|
+| ULB Credit Card Fraud | 2013年9月に欧州のカード保持者が利用した取引データ（PCA変換済）[cite: 10]。| 284,807件(不正率 0.172%)[cite: 11]| 極端なクラス不均衡下における異常検知や不均衡分類モデルの評価用標準ベンチマーク[cite: 10]。| Kaggle (ULB)[cite: 10, 37][https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)<br> |
+| IEEE-CIS Fraud Detection | Vesta社提供の実EC取引データ（数値・カテゴリ・端末ID属性等）。 | 590,540件(不正率 〜3.5%)
+ | 豊富な文脈情報を含むため、ディープラーニングやアンサンブル学習、特徴量エンジニアリングの評価に使用。 | [[https://www.kaggle.com/competitions/ieee-fraud-detection/data](https://www.kaggle.com/competitions/ieee-fraud-detection/data)<br> ](https://www.kaggle.com/competitions/ieee-fraud-detection/data)|
+| PaySim | モバイルマネーサービスの実際の実績をベースにした合成（シミュレーション）取引データ。 | 6,362,620件(不正率 〜0.129%)
+ | 大規模取引環境におけるスケーラビリティや強化学習・コスト考慮型モデルのシミュレーション評価で使用。
+
+ | [https://www.kaggle.com/datasets/ealaxi/paysim1](https://www.kaggle.com/datasets/ealaxi/paysim1)<br> |
+| Credit Card Fraud Detection 2023 | 2023年の欧州クレジットカード取引データ（バランス調整済みの実験をサポート）。
+
+ | 568,630件<br>
+
+<br>(不正率 50%)
+
+ | 最新の取引パターンに対するアンサンブル学習やディープニューラルネットワークの評価に使用。
+
+ | [https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)<br> |
+| Elliptic Bitcoin Dataset | ビットコインの取引ネットワーク（ノード＝取引、エッジ＝BTCの流れていく関係）。
+
+ | 203,769ノード<br>
+
+<br>(不正率 〜2.05%)
+
+ | 取引の「グラフ構造（ネットワーク関係）」を活かしたGNNや暗号資産の不正追跡モデルの検証に使用。
+
+ | [https://www.kaggle.com/datasets/ellipticco/elliptic-data-set](https://www.kaggle.com/datasets/ellipticco/elliptic-data-set)<br> |
