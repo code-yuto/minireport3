@@ -10,12 +10,11 @@
 査読のない論文（arXiv だけで出ているものなど）は「査読：なし」と書く。
 
 調べた 17 本から、研究計画書で役割がある 9 本に絞った（2026-10-14）。9 本とも査読あり。
-論文の番号は、17 本のときの番号のまま（Cosense のページと合わせるため）。
 
 | 区分 | 論文 |
 | --- | --- |
-| マスト | 論文1、3、6、8、11、13 |
-| あると良い | 論文2、7、17 |
+| マスト | 論文1、2、3、4、5、6 |
+| 補足 | 論文7、8、9 |
 
 ### マスト
 
@@ -36,7 +35,7 @@
   - ただし 1 台の計算機の中の話で、回線を通して送る話ではない
   - どのクラスを見逃しても同じ重さで扱っている
 
-### 論文3
+### 論文2
 - タイトル：Distributed Deep Neural Networks Over the Cloud, the Edge and End Devices（DDNN）
 - 著者・年：Surat Teerapittayanon, Bradley McDanel, H. T. Kung（ICDCS, 2017）
 - URL / DOI：https://doi.org/10.1109/icdcs.2017.226
@@ -51,7 +50,7 @@
   - 「エッジで自信があれば終わり、なければ上に送る」という今回の形の原型
   - ただし送る基準は確信度だけで、クラスの重さや回線の劣化は考えていない
 
-### 論文6
+### 論文3
 - タイトル：Optimal Confidence Thresholds for Cooperative Inference in Intelligent Surveillance Systems
 - 著者・年：Hyun-Ho Choi, Ki-Ho Lee, Kisong Lee（IEEE Internet of Things Journal, 2025）
 - URL / DOI：https://doi.org/10.1109/JIOT.2025.3594344
@@ -67,7 +66,7 @@
   - しきい値を 2 つ使う点、陽性と陰性の間違いを分けて考える点は近い。比べる方式の 1 つにする
   - ただし回線が変わる状況や、災害は扱っていない
 
-### 論文8
+### 論文4
 - タイトル：Link-adaptive edge-cloud inference for UAV-based plastic mulch residue assessment
 - 著者・年：Xinmiao Zhao ほか（Scientific Reports, 2026）
 - URL / DOI：https://doi.org/10.1038/s41598-026-65658-3
@@ -86,7 +85,7 @@
   - ただし、どのクラスを見逃すと困るかという「優先度」は考えていない
   - 対象は農業の領域分割（セグメンテーション）で、災害の画像分類ではない
 
-### 論文11
+### 論文5
 - タイトル：ClassyNet: Class-Aware Early-Exit Neural Networks for Edge Devices
 - 著者・年：Mohammed Ayyat, Tamer Nadeem, Bartosz Krawczyk（IEEE Internet of Things Journal, 2023）
 - URL / DOI：https://doi.org/10.1109/jiot.2023.3344120
@@ -102,7 +101,7 @@
   - ただし「1 台の中で計算をどこで打ち切るか」に優先度を使っている
   - 「細い回線で、どの画像を先にサーバーへ送るか」には使っていない
 
-### 論文13
+### 論文6
 - タイトル：EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion
 - 著者・年：Christos Kyrkou, Theocharis Theocharides（IEEE JSTARS, 2020）
 - URL / DOI：https://doi.org/10.1109/jstars.2020.2969809
@@ -117,9 +116,9 @@
   - 災害ドローンの画像分類という対象は同じ。データセット（AIDER）と軽いモデルはそのまま使える
   - ただしドローン 1 台の中で完結していて、サーバーとの分担や回線は考えていない
 
-### あると良い
+### 補足
 
-### 論文2
+### 論文7
 - タイトル：Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge
 - 著者・年：Yiping Kang, Johann Hauswald, Cao Gao, Austin Rovinski, Trevor Mudge, Jason Mars, Lingjia Tang（ASPLOS, 2017）
 - URL / DOI：https://doi.org/10.1145/3037697.3037698
@@ -134,7 +133,7 @@
   - エッジとサーバーで分担する点は同じ。ただし全部の画像を送る（途中の結果を送る）ので、送る枚数は減らない
   - 今回は「送らない画像を作る」ことで通信量を減らす
 
-### 論文7
+### 論文8
 - タイトル：Edge-Cloud Collaborated Object Detection via Bandwidth Adaptive Difficult-Case Discriminator（DCSB）
 - 著者・年：Zhiqiang Cao ほか（IEEE Transactions on Mobile Computing, 2024）
 - URL / DOI：https://doi.org/10.1109/TMC.2024.3474743
@@ -150,7 +149,7 @@
   - 回線に合わせて送る基準を変える点は近い
   - ただし「難しいかどうか」で決めていて、クラスごとの見逃しの重さは考えていない
 
-### 論文17
+### 論文9
 - タイトル：Semantic Task Offloading and Resource Allocation in UAV-Assisted Mobile Edge Computing Network for Disaster Rescue
 - 著者・年：Sai Liu, Zhenjiang Zhang, Guangjie Han（IEEE Transactions on Vehicular Technology, 2026）
 - URL / DOI：https://doi.org/10.1109/tvt.2026.3665191
@@ -168,21 +167,21 @@
 ### 外した論文（参考）
 役割が今回の軸（クラスの優先度・回線）と違う、または他の論文と重なるので外した。どれも査読あり。
 
-- 論文4：AppealNet（DAC 2021）https://doi.org/10.1109/dac18074.2021.9586176
+- AppealNet（DAC 2021）https://doi.org/10.1109/dac18074.2021.9586176
   - 判定を賢くする話で、今回の軸と違う
-- 論文5：EdgeBoost（DCOSS-IoT 2024）https://doi.org/10.1109/DCOSS-IoT61029.2024.00013
+- EdgeBoost（DCOSS-IoT 2024）https://doi.org/10.1109/DCOSS-IoT61029.2024.00013
   - 確信度の補正。「確信度は補正が要る」という教訓だけ使う
-- 論文9：MultiTASC++（ITU J-FET 2024）https://doi.org/10.52953/tbyb6219
+- MultiTASC++（ITU J-FET 2024）https://doi.org/10.52953/tbyb6219
   - しきい値を動かす理由がサーバーの混み具合で、回線ではない
-- 論文10：Jia ら（IEEE VTC2025-Fall）https://doi.org/10.1109/VTC2025-Fall65116.2025.11310097
-  - CIFAR-10 のシミュレーションだけ。論文8 で足りる
-- 論文12：Edge-Prioritize IDS（Information, MDPI, 2026）https://doi.org/10.3390/info17050451
-  - 論文11 と役割が重なる
-- 論文14：Ijaz ら（IEEE TGRS 2023）https://doi.org/10.1109/TGRS.2023.3306151
-  - AIDER を使っているが、論文13 で足りる
-- 論文15：LightViT-UAV（CBD 2025）https://doi.org/10.1109/cbd69312.2025.00014
+- Jia ら（IEEE VTC2025-Fall）https://doi.org/10.1109/VTC2025-Fall65116.2025.11310097
+  - CIFAR-10 のシミュレーションだけ。論文4 で足りる
+- Edge-Prioritize IDS（Information, MDPI, 2026）https://doi.org/10.3390/info17050451
+  - 論文5 と役割が重なる
+- Ijaz ら（IEEE TGRS 2023）https://doi.org/10.1109/TGRS.2023.3306151
+  - AIDER を使っているが、論文6 で足りる
+- LightViT-UAV（CBD 2025）https://doi.org/10.1109/cbd69312.2025.00014
   - クラウドとエッジが協調するのは学習の段階
-- 論文16：Hernández ら（IEEE Internet of Things Journal, vol. 9, no. 10, 2022。早期公開 2021）https://doi.org/10.1109/jiot.2021.3098379
+- Hernández ら（IEEE Internet of Things Journal, vol. 9, no. 10, 2022。早期公開 2021）https://doi.org/10.1109/jiot.2021.3098379
   - 分類ではなくクラスタリング
 
 ### 参考：査読なし・中身を確かめていないもの
@@ -196,15 +195,15 @@
   - 査読：未確認（要旨も読めていない）
 - Ayyat の博士論文（2026）
   - URL：https://doi.org/10.25772/5y08-e925
-  - 査読：なし（博士論文。論文11 などをまとめたもの）
+  - 査読：なし（博士論文。論文5 などをまとめたもの）
 
 ### まとめ：どこまで研究が進んでいるか
-- 「軽いモデルでふるいにかけ、迷ったものだけ重いモデルに送る」しくみは 2017 年ごろに確立した（論文1〜3）
-- 回線に合わせて送り方を変える研究はある（論文7、8）が、クラスの優先度は考えていない
-- クラスごとの優先度（論文11）は、1 台の中の計算の打ち切りにしか使われていない
-- 災害ドローン（論文13、17）は、ドローン 1 台の中か、シミュレーションが中心
+- 「軽いモデルでふるいにかけ、迷ったものだけ重いモデルに送る」しくみは 2017 年ごろに確立した（論文1、2、7）
+- 回線に合わせて送り方を変える研究はある（論文4、8）が、クラスの優先度は考えていない
+- クラスごとの優先度（論文5）は、1 台の中の計算の打ち切りにしか使われていない
+- 災害ドローン（論文6、9）は、ドローン 1 台の中か、シミュレーションが中心
 - この 3 つ（回線に合わせる・クラスの優先度・災害ドローン）を組み合わせた研究は見つからなかった
-  - 一番近いのは論文8（ドローン・回線に合わせる）と論文11（優先度の考え方）
+  - 一番近いのは論文4（ドローン・回線に合わせる）と論文5（優先度の考え方）
   - 調べ方：Google Scholar・arXiv・OpenAlex で約 20 回検索（2026-10-08 時点）
   - 「見つからなかった」は「存在しない」とは違う。IEEE の論文は要旨までしか読めていないものがある
 
@@ -213,13 +212,13 @@
 
 | 課題 | どの論文の話か | なぜ問題か |
 | --- | --- | --- |
-| どのクラスの間違いも同じ重さで扱う | 論文1、3、6、7、8 | 災害では、被災の見逃しは平常の画像を余計に送るよりずっと重い。確信度だけで送ると、自信を持って間違えた被災画像が送られない |
-| 回線を通して送る話になっていない | 論文1、11、13 | 災害時は回線が細く、だんだん悪くなる。1 台の中で速くしても、サーバーまで届くかは分からない |
-| クラスの優先度を「計算の打ち切り」にしか使っていない | 論文11 | 回線が細いときに「どの画像を先に送るか」には使われていない |
-| 回線に合わせるが、優先度がない | 論文7、8 | 回線が細くなると、大事な画像も一律に送られにくくなる |
-| 災害の対象・データで評価していない | 論文1、2、3、6、7、8、11 | 監視カメラ・農業・一般の画像が対象。災害画像は平常が大半で偏っており、正解率だけでは良し悪しが分からない |
-| 実際の画像で評価していない | 論文6、17 | シミュレーションだけで、実際の災害画像でうまくいくか分からない |
-| ドローン 1 台の中で完結している | 論文13 | ドローンの軽いモデルが見逃した画像は、だれも確かめられない |
+| どのクラスの間違いも同じ重さで扱う | 論文1、2、3、4、8 | 災害では、被災の見逃しは平常の画像を余計に送るよりずっと重い。確信度だけで送ると、自信を持って間違えた被災画像が送られない |
+| 回線を通して送る話になっていない | 論文1、5、6 | 災害時は回線が細く、だんだん悪くなる。1 台の中で速くしても、サーバーまで届くかは分からない |
+| クラスの優先度を「計算の打ち切り」にしか使っていない | 論文5 | 回線が細いときに「どの画像を先に送るか」には使われていない |
+| 回線に合わせるが、優先度がない | 論文4、8 | 回線が細くなると、大事な画像も一律に送られにくくなる |
+| 災害の対象・データで評価していない | 論文1、2、3、4、5、7、8 | 監視カメラ・農業・一般の画像が対象。災害画像は平常が大半で偏っており、正解率だけでは良し悪しが分からない |
+| 実際の画像で評価していない | 論文3、9 | シミュレーションだけで、実際の災害画像でうまくいくか分からない |
+| ドローン 1 台の中で完結している | 論文6 | ドローンの軽いモデルが見逃した画像は、だれも確かめられない |
 
 ## 3. 新規性
 先行研究に「ない」こと。
@@ -244,7 +243,7 @@
   - 送ったデータ量（ほぼ変わらないことを確かめる）
 - 比べる方式（同じデータ・同じ回線で再現する）：
   - 全部サーバーに送る
-  - 全部エッジで処理する（論文13 の EmergencyNet 単独）
-  - 確信度が低い画像だけ送る（論文1、3 の基本形）
-  - しきい値を 2 つ使う（論文6）
+  - 全部エッジで処理する（論文6 の EmergencyNet 単独）
+  - 確信度が低い画像だけ送る（論文1、2 の基本形）
+  - しきい値を 2 つ使う（論文3）
   - 提案
