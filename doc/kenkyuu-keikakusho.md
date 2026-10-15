@@ -78,111 +78,94 @@
 
 > 技術的課題を解決する先行研究に関する論文を提示し，提案技術およびPros & Consを述べる．続いて，Consのまとめから，研究目的を達成するための技術的要求条件を述べる．
 
-<!-- 【今週の宿題】下の9本を3人で3本ずつ読み，表の自分の担当の行を埋める．
+<!-- 【今週の宿題】下の9本を3人で3本ずつ読み，自分の担当の「一言まとめ」「Pros」「Cons」を書く（見本の形）．
      担当 A（山重）：[1] [2] [5]　送る画像の選び方と，送る時間の根拠
      担当 B（塚原）：[3] [4] [6]　ドローン・災害データ・中身で優先する方式
      担当 C（渡部）：[7] [8] [9]　災害時の優先送信（本研究と一番近い）
      書き方のきまり
      - 研究成果は数字で書く（何と比べて何%・何倍か）．数字がなければ「数字なし」
      - 長所・短所は「本研究（基地局で被災度の順に送り，被災状況を早く把握する）から見て」書く
-     - 推測は書かない．本文が読めなければ要旨でよい（どちらを読んだか所見に書く）
-     - 表の中で改行するときは <br> を使う
-     - 読むときのポイントは，表の下の「読むときのポイント」を見る -->
+     - 推測は書かない．本文が読めなければ要旨でよい（要旨だけのときは，一言まとめの最後に「（要旨のみ）」と書く）
+     - 一言まとめは「何をした研究か」を1文で．Pros・Cons は文章で2つ以上ずつ
+     - 読むときのポイントは，下の「読むときのポイント」を見る -->
 
-| | 論文タイトル<br>Paper Title | 研究目的<br>Research Objectives | 提案内容<br>Proposals | 研究成果<br>Research Achievements | 長所<br>Pros | 短所<br>Cons | 所見<br>Opinions |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| [1] | NoScope: Optimizing Neural Network Queries over Video at Scale | | | | | | |
-| [2] | Distributed Deep Neural Networks Over the Cloud, the Edge and End Devices | | | | | | |
-| [3] | Link-adaptive edge-cloud inference for UAV-based plastic mulch residue assessment | | | | | | |
-| [4] | EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion | | | | | | |
-| [5] | Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge | | | | | | |
-| [6] | The Design and Implementation of a Wireless Video Surveillance System | | | | | | |
-| [7] | Reliable Layered Transmission and Task Offloading in UAV-Assisted MEC Networks for Disaster Relief | | | | | | |
-| [8] | Content-based data prioritization for fast disaster images collection in delay tolerant network | | | | | | |
-| [9] | 帯域状況に基づくPoIを考慮した被災地情報収集機構 | | | | | | |
+**送る画像を選ぶ研究（エッジ・クラウド協調推論）**
 
-**各論文の Pros と Cons**（担当がここに直接書く．本研究から見た長所・短所を2つ以上ずつ）
+・**Kang ら[1]** NoScope（担当 A：山重）
 
-**[1] NoScope**（担当 A：山重）
+（一言まとめ：何をした研究かを1文で）
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+Pros：
 
-**[2] DDNN**（担当 A：山重）
+Cons：
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+・**Teerapittayanon ら[2]** DDNN（担当 A：山重）
 
-**[3] Link-adaptive edge-cloud inference（Zhao ら）**（担当 B：塚原）
+（一言まとめ：何をした研究かを1文で）
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+Pros：
 
-**[4] EmergencyNet**（担当 B：塚原）
+Cons：
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+・**Kang ら[5]** Neurosurgeon（担当 A：山重）
 
-**[5] Neurosurgeon**（担当 A：山重）
+（一言まとめ：何をした研究かを1文で）
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+Pros：
 
-**[6] Vigil**（担当 B：塚原）
+Cons：
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+**ドローンと災害画像に関する研究**
 
-**[7] Reliable Layered Transmission（Desher ら）**（担当 C：渡部）
+・**Zhao ら[3]** 回線に合わせるドローンの協調推論（担当 B：塚原）
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+（一言まとめ：何をした研究かを1文で）
 
-**[8] Content-based data prioritization（Fajardo ら）**（担当 C：渡部）
+Pros：
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+Cons：
 
-**[9] 帯域状況に基づくPoIを考慮した被災地情報収集機構（小林ら）**（担当 C：渡部）
+・**Kyrkou ら[4]** EmergencyNet と AIDER（担当 B：塚原）
 
-- Pros
-  - 
-  - 
-- Cons
-  - 
-  - 
+（一言まとめ：何をした研究かを1文で）
+
+Pros：
+
+Cons：
+
+**中身や重要度で優先して送る研究**
+
+・**Zhang ら[6]** Vigil（担当 B：塚原）
+
+（一言まとめ：何をした研究かを1文で）
+
+Pros：
+
+Cons：
+
+・**Desher ら[7]** 災害時のドローンの優先送信（担当 C：渡部）
+
+（一言まとめ：何をした研究かを1文で）
+
+Pros：
+
+Cons：
+
+・**Fajardo ら[8]** 災害画像を中身で優先して集める（担当 C：渡部）
+
+（一言まとめ：何をした研究かを1文で）
+
+Pros：
+
+Cons：
+
+・**小林ら[9]** 重要度と帯域で被災地の情報を集める（担当 C：渡部）
+
+（一言まとめ：何をした研究かを1文で）
+
+Pros：
+
+Cons：
 
 <!-- 読むときのポイント（宿題用．提出前に消す）
      [1] NoScope（A）：何をふるいにかけ，何を重いモデルに回すか／2つのしきい値の決め方／30fpsを何フレームおきに間引くか／重いモデルだけと比べた速さと精度／固定カメラ・1台の中の話という限界
