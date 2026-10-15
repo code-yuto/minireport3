@@ -18,7 +18,7 @@
 
 ## 研究テーマ / Research Topic
 
-**エッジAIの被災度判定を用いた基地局優先送信による災害画像収集の早期化**
+**エッジAIの被災度判定を用いた基地局優先送信による被災状況把握の早期化**
 
 > 日本語40字以内で句読点は使用しない（35字）／「・・・の開発」「・・・の提案」は使用しない／達成すべき課題（研究目的）と提案内容を含む
 
@@ -28,16 +28,26 @@
 
 > 根拠となる情報(論文を含む)を用いて社会的課題(実現すべき理想)を提示し，それを解決するためにどのような技術が必要かを述べる．課題と問題を理解していない人が多いので注意すること．
 
+**日本の災害の現状**
+
+日本は，地震・豪雨・台風による大きな災害が毎年のように起きる国である．
+
+- **地震**：世界で起きるマグニチュード6以上の地震の約2割が日本の周辺で起きている．分かっているだけでも約2,000の活断層があり，世界の活火山の約7%にあたる110の活火山がある[12]．
+- **豪雨**：1時間に50mm以上の激しい雨の年間発生回数（アメダス1,300地点あたり）は，最初の10年間（1976〜1985年）の平均約226回から，最近の10年間（2015〜2024年）の平均約334回へと，約1.5倍に増えている[13]．
+- **台風**：1年に平均25.1個の台風が発生し，そのうち11.7個が日本に接近し，3.0個が上陸する（1991〜2020年の平均）[14]．
+
+災害は通信にも大きな被害を与える．2024年1月の能登半島地震では，停電の長期化や土砂崩れによる伝送路の断絶のため，携帯電話4社の合計で最大839の基地局（うち石川県799）が止まった（1月3日時点）[15]．
+
 **社会的課題（実現すべき理想）**
 
-大規模な災害の直後には，どこで何が起きているか（建物の倒壊・火災・洪水・交通事故など）を早く正確に把握し，救助や支援の判断につなげることが求められる．人が近づけない場所の状況を確かめる手段として，カメラを載せたドローンで上空から撮影する方法が使われている[6]．広い範囲を短い時間で確かめるには，複数のドローンを同時に飛ばすことになる．
+大規模な災害の直後には，どこで何が起きているか（建物の倒壊・火災・洪水・交通事故など）を早く正確に把握し，救助や支援の判断につなげることが求められる．人が近づけない場所の状況を確かめる手段として，カメラを載せたドローンで上空から撮影する方法が使われている[4]．広い範囲を短い時間で確かめるには，複数のドローンを同時に飛ばすことになる．
 
 したがって本研究で実現すべき理想は，「**災害の直後に，複数のドローンが撮影した被災状況が，遅れなく本部に届き，救助の判断に使える状態**」である．
 
 **理想を妨げている問題**
 
-- 災害時は地上の基地局が壊れたり弱ったりし，通常の通信が途切れる．ドローンを使った通信でも帯域は厳しく制限される[9][11]．
-- 画像を送る時間は，計算する時間よりずっと長い．画像1枚（152KB）を送るのに3Gで870ms以上かかるのに対し，サーバーでの計算は6msである[7]．
+- 災害時は地上の基地局が壊れたり弱ったりし，通常の通信が途切れる（能登半島地震では最大839局が停波した[15]）．ドローンを使った通信でも帯域は厳しく制限される[10][7]．
+- 回線が細いと，画像を送る時間が計算する時間を上回る．例えば，Neurosurgeon[5]の測定では，152KBの画像1枚を3Gで送るのに870ms以上かかったのに対し，クラウドのGPUでの計算は6msであり，全体の時間の94%以上が送る時間だった．
 - 複数のドローンが1つの基地局の細い回線を共有すると，送信待ちの行列ができる．現在の基地局は，優先度を「通信の種類」や「利用者」で決めており，**画像に何が写っているかでは決めていない**．そのため，被災が写った画像も，何も起きていない平常の画像も，同じように待たされ，**被災の情報が本部に届くのが遅れる**．
 
 **理想の実現に求められる技術**
@@ -52,13 +62,15 @@
 
 > 技術的な成果として何が達成されるのかを述べる．
 
-本研究の目的は，複数のドローンが細い回線を共有する災害時に，**送るデータの量と回線の速さを変えずに，被災画像が本部に届くまでの時間を短くすること**である．
+本研究の目的は，複数のドローンが細い回線を共有する災害時でも，**本部が被災状況を早く把握できるようにすること**である．
+
+そのための手段として，送るデータの量と回線の速さは変えずに，被災が写っている可能性が高い画像から先に本部へ届ける．被災画像が本部に届くまでの時間は，この目的がどれだけ達成できたかを測るための指標として使う．
 
 技術的な成果として，次の3つを達成する．
 
-1. 回線が混んでいる条件で，被災画像の90%が本部で確認されるまでの時間を，到着順に送る方式より短くする
-2. 平常の画像の遅れ（取り残し）を，被災画像だけを優先する方式より小さくする
-3. ドローンの台数・被災画像の割合・回線の速さによって，効果がどう変わるか（どの条件で効くか）を明らかにする
+1. 回線が混んでいる条件でも，到着順に送る方式より早く，本部が被災状況を把握できる（被災画像の90%が本部で確認されるまでの時間が短い）
+2. 被災状況を早く把握しながら，平常の画像も取り残さずに本部へ届けられる（平常の画像の遅れが，被災画像だけを優先する方式より小さい）
+3. ドローンの台数・被災画像の割合・回線の速さによって，被災状況を把握できる早さがどう変わるか（どの条件で効くか）を明らかにする
 
 ---
 
@@ -66,33 +78,149 @@
 
 > 技術的課題を解決する先行研究に関する論文を提示し，提案技術およびPros & Consを述べる．続いて，Consのまとめから，研究目的を達成するための技術的要求条件を述べる．
 
+<!-- 【今週の宿題】下の9本を3人で3本ずつ読み，表の自分の担当の行を埋める．
+     担当 A（山重）：[1] [2] [5]　送る画像の選び方と，送る時間の根拠
+     担当 B（塚原）：[3] [4] [6]　ドローン・災害データ・中身で優先する方式
+     担当 C（渡部）：[7] [8] [9]　災害時の優先送信（本研究と一番近い）
+     書き方のきまり
+     - 研究成果は数字で書く（何と比べて何%・何倍か）．数字がなければ「数字なし」
+     - 長所・短所は「本研究（基地局で被災度の順に送り，被災状況を早く把握する）から見て」書く
+     - 推測は書かない．本文が読めなければ要旨でよい（どちらを読んだか所見に書く）
+     - 表の中で改行するときは <br> を使う
+     - 読むときのポイントは，表の下の「読むときのポイント」を見る -->
+
 | | 論文タイトル<br>Paper Title | 研究目的<br>Research Objectives | 提案内容<br>Proposals | 研究成果<br>Research Achievements | 長所<br>Pros | 短所<br>Cons | 所見<br>Opinions |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [1] | NoScope | 大量の監視映像へのAIの適用を安くする | 動画専用の小さなモデルでふるいにかけ，確信度が2つのしきい値の間のフレームだけ重いモデルへ回す | 精度の低下1〜5%で265〜15,500倍速い | 軽いモデルでふるう基本形．しきい値を目標の見逃し率から決められる | 1台の計算機の中の話で，回線を通さない．固定カメラが前提 | ふるいの考え方を，ドローンの送る判定に使う |
-| [2] | DDNN | 端末で答えを出して通信を減らす | 端末・エッジ・クラウドにモデルを分け，エントロピーが小さければ端末で終える | 生の画像を送る方式より通信量を20分の1以下にした | 「自信があれば終わり，なければ送る」の原型．通信量をバイトで評価 | 32×32の3クラス，171枚の小さな実験．送る順番は考えない | 比べる方式「到着順」の送る判定のもと |
-| [3] | Choi ら | 監視カメラの協調推論で，精度を守りつつ遅延を最小にする | しきい値を2つ使い，迷う画像だけサーバーへ送る．しきい値を最適化で決める | 端末だけより高精度，サーバーだけより低遅延（シミュレーション） | 誤報と見逃しを分けて考える | 回線が変わる条件，災害，実画像を扱わない | 送る判定の別案として参考にする |
-| [4] | Zhao ら | ドローン画像の処理で，精度・遅延・上りの帯域を同時に満たす | 回線の速さ・確信度・画像の変化を1つの点数にし，ドローンで終える／一部送る／全部送るを決める | クラウドだけの精度の97.1%を，遅延の中央値72msで達成．回線の変化に固定しきい値の3.4倍速く対応 | ドローン×回線に合わせる点で最も近い．4Gの上り8〜48Mbpsなどの回線条件 | 何が写っているかで優先しない．ドローン1台．農業の領域分割 | 回線条件の根拠と，遅延の測り方（中央値・99%値）に使う |
-| [5] | ClassyNet | 大事なクラスを早く判定する | 早期終了モデルで，出口ごとに答えを出すクラスを選べるようにする | 優先クラスの推論が最大4倍速い．精度の低下1%未満 | クラスごとに重さを変える考え方 | 優先度の使い道が1台の中の計算の打ち切りで，回線での送る順番ではない | 「クラスの優先度」の先行例として違いを書く |
-| [6] | EmergencyNet | ドローンの上で災害画像を速く分類する | 災害空撮データセットAIDERと，軽いモデルEmergencyNet | F1 95.7%，パラメータ約9万，ARM Cortex-A57で約25枚/秒 | 公開データとモデルがそのまま使える | ドローン1台の中で完結し，送信を考えない．主な誤りは被災を平常と見逃すこと | 本研究のデータとエッジのモデル |
-| [7] | Neurosurgeon | スマホとクラウドで処理を分けて速くする | モデルを途中の層で切り，回線の速さとサーバーの混み具合から切る場所を選ぶ | クラウドだけより平均3.1倍速い | 回線の速さを測って判断を変える．送る時間の実測値 | 全部の画像を送るので，送る量は減らない | 「送る時間が計算より長い」根拠 |
-| [8] | DCSB | エッジとクラウドで物体検出を分担する | 難しい画像だけクラウドへ送る．回線の状態ごとに判定器を使い分ける | 帯域を74〜82%節約．8Mbpsで分割推論より推論時間を92〜95%短縮 | 送らない画像を作る方が速いことを示した | 「難しいか」で送り，被災の優先度はない | 「送らない画像を作る」方向の根拠 |
-| [9] | Liu ら | 基地局が壊れた災害時に，ドローンで救助の計算を助ける | 画像の圧縮率・計算・帯域・電力・飛ぶ道をまとめて最適化 | 帯域の不足を乗り越え，消費電力を減らした（シミュレーション） | 災害時の帯域不足を扱う | 数式とシミュレーションだけで，画像の分類を見ない | 背景（災害時の帯域不足）の根拠 |
-| [10] | Vigil | 複数の無線カメラで，探している物体を効率よく届ける | 探している物体が写ったフレームを優先して，カメラ間の無線をスケジューリングする | 均等配分より関係する物体を最大25%多く届けた | 画像の中身で，複数カメラの間で優先して送る | 監視カメラが対象で，災害でない．平常の画像の取り残しや待ち時間を考えない | 最も近い先行研究．比べる方式「中身で優先」のもと |
-| [11] | Desher ら | 災害時のドローンのエッジ計算で，急ぐ利用者を優先する | 利用者の種類（救助隊など）と，データの層で優先度を付け，電力とCPUを配分する | 優先なしより遅延を約70%減らした（数値計算） | 災害時の優先送信 | 優先度が画像の中身ではなく利用者の種類で決まる．画像データで評価していない | 「優先度を中身で決める」点が本研究との違い |
+| [1] | NoScope: Optimizing Neural Network Queries over Video at Scale | | | | | | |
+| [2] | Distributed Deep Neural Networks Over the Cloud, the Edge and End Devices | | | | | | |
+| [3] | Link-adaptive edge-cloud inference for UAV-based plastic mulch residue assessment | | | | | | |
+| [4] | EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion | | | | | | |
+| [5] | Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge | | | | | | |
+| [6] | The Design and Implementation of a Wireless Video Surveillance System | | | | | | |
+| [7] | Reliable Layered Transmission and Task Offloading in UAV-Assisted MEC Networks for Disaster Relief | | | | | | |
+| [8] | Content-based data prioritization for fast disaster images collection in delay tolerant network | | | | | | |
+| [9] | 帯域状況に基づくPoIを考慮した被災地情報収集機構 | | | | | | |
+
+**各論文の Pros と Cons**（担当がここに直接書く．本研究から見た長所・短所を2つ以上ずつ）
+
+**[1] NoScope**（担当 A：山重）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[2] DDNN**（担当 A：山重）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[3] Link-adaptive edge-cloud inference（Zhao ら）**（担当 B：塚原）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[4] EmergencyNet**（担当 B：塚原）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[5] Neurosurgeon**（担当 A：山重）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[6] Vigil**（担当 B：塚原）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[7] Reliable Layered Transmission（Desher ら）**（担当 C：渡部）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[8] Content-based data prioritization（Fajardo ら）**（担当 C：渡部）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+**[9] 帯域状況に基づくPoIを考慮した被災地情報収集機構（小林ら）**（担当 C：渡部）
+
+- Pros
+  - 
+  - 
+- Cons
+  - 
+  - 
+
+<!-- 読むときのポイント（宿題用．提出前に消す）
+     [1] NoScope（A）：何をふるいにかけ，何を重いモデルに回すか／2つのしきい値の決め方／30fpsを何フレームおきに間引くか／重いモデルだけと比べた速さと精度／固定カメラ・1台の中の話という限界
+         無料で読める版 https://arxiv.org/abs/1703.02529
+     [2] DDNN（A）：端末で終えるか上に送るかを何で決めるか（エントロピーとしきい値T）／Tごとの「端末で終えた割合・精度・通信量」の表／通信量を何バイトで数えたか／実験の規模／送る順番を考えているか
+         無料で読める版 https://arxiv.org/abs/1709.01921
+     [3] Zhaoら（B）：回線の速さ・確信度・画像の変化を1つの点数にする方法／ドローンで終える・一部送る・全部送るの分け方／回線の条件（補足資料の表S2，external/zhao-plastic-mulch/configs/link_profiles.yaml）／IoU・遅延の中央値・回線変化への反応／画像の中身で優先しているか
+     [4] EmergencyNet（B）：AIDERのクラスと枚数，平常が多い理由／正解率でなくF1を使う理由／F1・パラメータ数・ドローンのCPUでの速さ／間違いの傾向／送信を考えているか
+         無料で読める版 https://arxiv.org/abs/2104.14006
+     [5] Neurosurgeon（A）：第3章 Figure 3（152KBの画像を3G・LTE・Wi-Fiで送る時間と計算時間）／モデルを切る場所の決め方／クラウドだけと比べた遅延・電力／全部の画像を送るか／いつごろの回線の測定か
+         無料で読める版 https://www.cl.cam.ac.uk/~ey204/teaching/ACS/R244_2017_2018/papers/kang_asplos_2017.pdf
+     [6] Vigil（B）：フレームの優先度を何で決めるか／複数カメラの間で無線をどう割り当てるか／均等配分と比べて何%多く届けたか／優先度の低いフレームの取り残しを考えているか／監視カメラと災害の違い
+     [7] Desherら（C）：優先度を何で決めるか（利用者の種類・データの層）．画像の中身は見ているか／優先度を何に使うか（電力・CPU・順番）／数値計算か実画像か／優先なしと比べた遅延の減り方
+         無料で読める版 https://doi.org/10.3390/drones10030167
+     [8] Fajardoら（C）：写真の中身から何を検出して優先度を付けるか（深層学習か）／どこで先に送るか（端末か中継か）／DTNと本研究（ドローンが共有する回線）の違い／優先なしと比べた遅延の短縮／優先度の低い画像の遅れを考えているか
+         日本語の要旨（博士論文）https://naist.repo.nii.ac.jp/record/10732/files/R010599.pdf
+     [9] 小林ら（C）：重要度（PoI）を何から計算するか．画像の中身は見ているか／使える帯域の求め方（最大流）と送る順番の決め方／どこで判断するか（中継器・中間サーバー）／評価の方法と数字／実際の災害画像で評価しているか
+         https://ipsj.ixsq.nii.ac.jp/records/194371 -->
 
 **Cons のまとめ**
 
-- 送る画像を減らす研究[1][2][3][8]は，どれも「送るか送らないか」だけを決め，**混んだときにどれを先に送るか**は決めていない．
-- 回線に合わせる研究[4][7][8]は，**画像に何が写っているか**で優先していない．
-- 優先度を使う研究のうち，[5]は1台の中の計算に使い，[11]は利用者の種類で決める．[10]は中身で優先するが，災害ではなく，**平常の画像の取り残し**を考えていない．
-- 災害の画像を使う研究[6]は，ドローン1台の中で完結している．[9][11]は実際の画像で評価していない．
+<!-- 3人の表がそろったら書く．何本かの論文に共通する短所をまとめる．下は書く前の見込み（表を埋めたら見直す）
+     - 送る画像を減らす研究[1][2]は「送るか送らないか」だけを決め，混んだときにどれを先に送るかは決めていない
+     - 回線に合わせる研究[3][5]は，画像に何が写っているかで優先していない
+     - 優先して送る研究のうち，[7]は利用者の種類，[9]は事象の種類や時刻（メタデータ）で優先度を決め，画像の中身を見ていない
+     - 画像の中身で優先する研究[6][8]は，監視カメラ[6]やスマホ同士の中継（DTN）[8]が対象で，複数ドローンが共有する細い回線ではない．優先度の低い画像の取り残しも考えていない
+     - 災害の画像を使う研究[4]はドローン1台の中で完結し，[7][9]は実際の災害画像で評価していない -->
+
+- （記入）
 
 **技術的要求条件**
 
-- **R1**：ドローンの上で画像を分類し，送る画像を減らせること（[1][2][6]の方法で満たせる）
+<!-- Cons のまとめから書く．下は案（表を埋めたら見直す） -->
+
+- **R1**：ドローンの上で画像を分類し，送る画像を減らせること
 - **R2**：共有回線が混んだとき，被災が写っている可能性が高い画像を先に本部へ届けられること
 - **R3**：R2を行っても，平常の画像が取り残されないこと
-- **R4**：実際の災害空撮画像を使い，「被災画像が本部に届くまでの時間」で評価できること
+- **R4**：実際の災害空撮画像を使い，本部が被災状況を把握できる早さで評価できること
 
 ---
 
@@ -108,7 +236,7 @@
 ドローンN ─┘                       ↑ 送る順番を決める（提案）
 ```
 
-1. **ドローン（R1）**：エッジAI（[6]のEmergencyNet）で画像を分類し，確信度が低い画像だけを送る（[1][2]の基本形をそのまま使う）．送る画像には，被災度 s = 1 − P(平常) を付ける．
+1. **ドローン（R1）**：エッジAI（[4]のEmergencyNet）で画像を分類し，確信度が低い画像だけを送る（[1][2]の基本形をそのまま使う）．送る画像には，被災度 s = 1 − P(平常) を付ける．
 2. **基地局（R2・R3，提案）**：回線が混んでいるとき，待っている画像の中から，**優先度 = s + α × 待ち時間** が最も大きい画像を次に送る．s が大きい（被災っぽい）画像ほど先に送られ，待ち時間の項によって平常の画像もいつかは送られる．
 3. **本部のサーバー**：届いた画像を，精度の高いモデルで分類し直す．
 
@@ -116,8 +244,8 @@
 
 **仮説とその科学的根拠**
 
-- 根拠1（待ち行列の理論）：優先度付きの待ち行列（送信中のデータは途中で止めない方式）では，優先度の高いデータの平均待ち時間は，送信中のデータが終わるのを待つ分を除けば，**自分と同じか高い優先度のデータの量**で決まる[12]．回線の使用率を ρ，そのうち優先度の高いデータの使用率を ρ₁ とすると，平均待ち時間は，到着順なら 1/(1−ρ)，優先なら 1/(1−ρ₁) の形で増える．ρ が1に近い（混んでいる）ほど到着順の待ち時間は大きくなるが，ρ₁ が小さければ優先度の高いデータの待ち時間は小さいままになる．
-- 根拠2（事実）：災害の空撮画像は，ほとんどが平常の画像である（AIDERでも平常が約7割[6]．実際の飛行ではさらに多いと考えられる）．
+- 根拠1（待ち行列の理論）：優先度付きの待ち行列（送信中のデータは途中で止めない方式）では，優先度の高いデータの平均待ち時間は，送信中のデータが終わるのを待つ分を除けば，**自分と同じか高い優先度のデータの量**で決まる[11]．回線の使用率を ρ，そのうち優先度の高いデータの使用率を ρ₁ とすると，平均待ち時間は，到着順なら 1/(1−ρ)，優先なら 1/(1−ρ₁) の形で増える．ρ が1に近い（混んでいる）ほど到着順の待ち時間は大きくなるが，ρ₁ が小さければ優先度の高いデータの待ち時間は小さいままになる．
+- 根拠2（事実）：災害の空撮画像は，ほとんどが平常の画像である（AIDERでも平常が約7割[4]．実際の飛行ではさらに多いと考えられる）．
 - 根拠3（予備実験，2026-10-14，`experiments/feasibility/`）：AIDERを使ったシミュレーションで，回線が混む条件では，送る順番を被災度の順にすると，被災画像が確認されるまでの平均時間が12.5秒から6.3秒に縮んだ．一方，送る判定を変えても見逃し率は変わらなかった（どの方式も3.3%）．
 
 **仮説**：被災画像は送る画像の一部（ρ₁ < ρ）なので，被災度の順に送れば，被災画像の待ち時間は到着順より短くなる．その差は，**送る画像に占める被災画像の割合が小さいほど大きく**なる．
@@ -126,11 +254,11 @@
 
 **新規性**
 
-- エッジAIが画像から出した**被災度を，複数のドローンが共有する基地局の送る順番に使う**こと（[10]は災害を対象とせず，[11]は利用者の種類で優先する）
-- 被災度に**待ち時間を加え**，被災画像を早く届けながら平常の画像の取り残しを防ぐこと（[10]は考えていない）
-- **実際の災害空撮画像（AIDER）で，被災画像が本部に届くまでの時間**を評価すること
+- 深層学習のエッジAIが画像から出した**被災度を，複数のドローンが共有する基地局の送る順番に使う**こと（[6]は災害を対象とせず，[7]は利用者の種類，[9]は事象の種類や時刻で優先し，[8]はスマホ同士の中継網で画像処理による優先度を使う）
+- 被災度に**待ち時間を加え**，被災状況を早く把握しながら平常の画像の取り残しを防ぐこと（[6][8]は考えていない）
+- **実際の災害空撮画像（AIDER）で，本部が被災状況を把握できる早さ**を評価すること（[7][9]は実際の災害画像で評価していない）
 
-なお，「画像の中身で優先して送る」こと自体[10]，優先度付きの待ち行列そのもの[12]は，すでにある．本研究の新規性は，これらを災害時の複数ドローンの画像収集に組み合わせ，実際の災害画像で評価する点にある．
+なお，「画像の中身で優先度を付けて，災害画像を早く集める」こと自体[8]，「中継で重要度と帯域から送る順番を決める」こと自体[9]，「画像の中身で複数カメラの間で優先して送る」こと自体[6]，優先度付きの待ち行列そのもの[11]は，すでにある．本研究の新規性は，これらを複数ドローンが細い回線を共有する災害時の画像収集に組み合わせ，実際の災害空撮画像で評価する点にある．
 
 ---
 
@@ -143,13 +271,13 @@
 
 | 項目 | 値 | 根拠 |
 | --- | --- | --- |
-| データ | AIDER公開版 6,433枚を学習50%／検証20%／テスト30%に分ける | [6] |
-| エッジのモデル | EmergencyNet（動かなければMobileNetV3-Small） | [6]，予備実験 |
+| データ | AIDER公開版 6,433枚を学習50%／検証20%／テスト30%に分ける | [4] |
+| エッジのモデル | EmergencyNet（動かなければMobileNetV3-Small） | [4]，予備実験 |
 | 1台が分類する枚数 | 2枚/秒 | [1]の30fpsを15フレームおきに間引く例 |
-| 送る画像 | 240×240のJPEG（平均約14KB）．確信度が低いものを全体の約40%送る | [6]の入力の大きさ，[1][2] |
+| 送る画像 | 240×240のJPEG（平均約14KB）．確信度が低いものを全体の約40%送る | [4]の入力の大きさ，[1][2] |
 | ドローンの台数 | 1／3／5／10台 | 回線の混み方を変える |
 | 被災画像の割合 | 5%／10%／30% | 根拠2 |
-| 回線 | 1Mbps／200kbps／10Mbps→1Mbps→200kbpsと細くなる | [7]の3Gの実測（約1.4Mbps以下），[9] |
+| 回線 | 1Mbps／200kbps／10Mbps→1Mbps→200kbpsと細くなる | [5]の3Gの実測（約1.4Mbps以下），[10] |
 | くり返し | 流す順番を変えて10回 | |
 
 **測る指標**
@@ -157,7 +285,7 @@
 「本部で確認される」とは，送った画像はサーバーの分類結果が出たとき，送らなかった画像はエッジの判定結果（数十バイト）が届いたとき，とする．
 
 - 被災画像の90%が本部で確認されるまでの時間（主な指標）
-- 被災画像の遅延の平均・中央値・99%値（[4]と同じ測り方）
+- 被災画像の遅延の平均・中央値・99%値（[3]と同じ測り方）
 - 平常の画像の遅延の最大値（取り残しの指標）
 - 送ったデータ量（バイト．[2]と同じ数え方．どの方式でも同じになることを確かめる）
 
@@ -173,14 +301,14 @@
 | 比べる方式 | もとにした論文 | 基地局の送る順番 |
 | --- | --- | --- |
 | 到着順 | [1][2]（送る判定のみ．順番は考えない） | 来た順 |
-| 中身で優先 | [10] | 被災度の高い順（待ち時間なし） |
+| 中身で優先 | [6][8] | 被災度の高い順（待ち時間なし） |
 | 提案 | ― | 被災度＋待ち時間 |
 | （参考）全部送る | クラウドだけで処理する場合 | 来た順 |
-| （参考）エッジだけ | [6] | 送らない |
+| （参考）エッジだけ | [4] | 送らない |
 
 - 到着順と比べて：被災画像の90%が届くまでの時間が短いことを示す（R2）
 - 中身で優先と比べて：被災画像の遅れをほぼ同じに保ちながら，平常の画像の遅延の最大値が小さいことを示す（R3）
-- エッジのモデルのF1を測り，[6]の95.7%と比べて，エッジのモデルが正しく再現できているかを確かめる
+- エッジのモデルのF1を測り，[4]の95.7%と比べて，エッジのモデルが正しく再現できているかを確かめる
 
 ---
 
@@ -221,25 +349,31 @@
 
 [2] Surat Teerapittayanon, Bradley McDanel, H. T. Kung, "Distributed Deep Neural Networks Over the Cloud, the Edge and End Devices," Proceedings of the IEEE 37th International Conference on Distributed Computing Systems (ICDCS), 2017, pp. 328-339. https://doi.org/10.1109/icdcs.2017.226
 
-[3] Hyun-Ho Choi, Ki-Ho Lee, Kisong Lee, "Optimal Confidence Thresholds for Cooperative Inference in Intelligent Surveillance Systems," IEEE Internet of Things Journal, Vol. 12, No. 20, 2025, pp. 42953-42964. https://doi.org/10.1109/JIOT.2025.3594344
+[3] Xinmiao Zhao, Jingjing Zhang, Dilxat Dolkun, Jin Xu, Si An, "Link-adaptive edge-cloud inference for UAV-based plastic mulch residue assessment," Scientific Reports, 2026 (accelerated preview). https://doi.org/10.1038/s41598-026-65658-3
 
-[4] Xinmiao Zhao, Jingjing Zhang, Dilxat Dolkun, Jin Xu, Si An, "Link-adaptive edge-cloud inference for UAV-based plastic mulch residue assessment," Scientific Reports, 2026 (accelerated preview). https://doi.org/10.1038/s41598-026-65658-3
+[4] Christos Kyrkou, Theocharis Theocharides, "EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion," IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, Vol. 13, 2020, pp. 1687-1699. https://doi.org/10.1109/jstars.2020.2969809
 
-[5] Mohammed Ayyat, Tamer Nadeem, Bartosz Krawczyk, "ClassyNet: Class-Aware Early-Exit Neural Networks for Edge Devices," IEEE Internet of Things Journal, Vol. 11, No. 9, 2024, pp. 15113-15127. https://doi.org/10.1109/jiot.2023.3344120
+[5] Yiping Kang, Johann Hauswald, Cao Gao, Austin Rovinski, Trevor Mudge, Jason Mars, Lingjia Tang, "Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge," Proceedings of the 22nd International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS), 2017, pp. 615-629. https://doi.org/10.1145/3037697.3037698
 
-[6] Christos Kyrkou, Theocharis Theocharides, "EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion," IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, Vol. 13, 2020, pp. 1687-1699. https://doi.org/10.1109/jstars.2020.2969809
+[6] Tan Zhang, Aakanksha Chowdhery, Paramvir Bahl, Kyle Jamieson, Suman Banerjee, "The Design and Implementation of a Wireless Video Surveillance System," Proceedings of the 21st Annual International Conference on Mobile Computing and Networking (MobiCom), 2015, pp. 426-438. https://doi.org/10.1145/2789168.2790123
 
-[7] Yiping Kang, Johann Hauswald, Cao Gao, Austin Rovinski, Trevor Mudge, Jason Mars, Lingjia Tang, "Neurosurgeon: Collaborative Intelligence Between the Cloud and Mobile Edge," Proceedings of the 22nd International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS), 2017, pp. 615-629. https://doi.org/10.1145/3037697.3037698
+[7] Anfal R. Desher, Ali Al-Shuwaili, "Reliable Layered Transmission and Task Offloading in UAV-Assisted MEC Networks for Disaster Relief," Drones, Vol. 10, No. 3, 2026, 167. https://doi.org/10.3390/drones10030167
 
-[8] Zhiqiang Cao, Yun Cheng, Zimu Zhou, Yongrui Chen, Youbing Hu, Anqi Lu, Jie Liu, Zhijun Li, "Edge-Cloud Collaborated Object Detection via Bandwidth Adaptive Difficult-Case Discriminator," IEEE Transactions on Mobile Computing, Vol. 24, No. 2, 2025, pp. 1181-1196. https://doi.org/10.1109/TMC.2024.3474743
+[8] Jovilyn Therese B. Fajardo, Keiichi Yasumoto, Minoru Ito, "Content-based data prioritization for fast disaster images collection in delay tolerant network," Proceedings of the 7th International Conference on Mobile Computing and Ubiquitous Networking (ICMU), 2014, pp. 147-152. https://doi.org/10.1109/ICMU.2014.6799086
 
-[9] Sai Liu, Zhenjiang Zhang, Guangjie Han, "Semantic Task Offloading and Resource Allocation in UAV-Assisted Mobile Edge Computing Network for Disaster Rescue," IEEE Transactions on Vehicular Technology, Vol. 75, No. 7, 2026, pp. 14903-14920. https://doi.org/10.1109/tvt.2026.3665191
+[9] 小林裕樹, 西山潤, 谷遼太郎, 重野寛, "帯域状況に基づくPoIを考慮した被災地情報収集機構," 情報処理学会論文誌, Vol. 60, No. 2, 2019, pp. 459-468. https://ipsj.ixsq.nii.ac.jp/records/194371
 
-[10] Tan Zhang, Aakanksha Chowdhery, Paramvir Bahl, Kyle Jamieson, Suman Banerjee, "The Design and Implementation of a Wireless Video Surveillance System," Proceedings of the 21st Annual International Conference on Mobile Computing and Networking (MobiCom), 2015, pp. 426-438. https://doi.org/10.1145/2789168.2790123
+[10] Sai Liu, Zhenjiang Zhang, Guangjie Han, "Semantic Task Offloading and Resource Allocation in UAV-Assisted Mobile Edge Computing Network for Disaster Rescue," IEEE Transactions on Vehicular Technology, Vol. 75, No. 7, 2026, pp. 14903-14920. https://doi.org/10.1109/tvt.2026.3665191
 
-[11] Anfal R. Desher, Ali Al-Shuwaili, "Reliable Layered Transmission and Task Offloading in UAV-Assisted MEC Networks for Disaster Relief," Drones, Vol. 10, No. 3, 2026, 167. https://doi.org/10.3390/drones10030167
+[11] Alan Cobham, "Priority Assignment in Waiting Line Problems," Journal of the Operations Research Society of America, Vol. 2, No. 1, 1954, pp. 70-76. https://doi.org/10.1287/opre.2.1.70
 
-[12] Alan Cobham, "Priority Assignment in Waiting Line Problems," Journal of the Operations Research Society of America, Vol. 2, No. 1, 1954, pp. 70-76. https://doi.org/10.1287/opre.2.1.70
+[12] 内閣府, "平成25年版 防災白書 第1部 特集 はじめに," 2013. https://www.bousai.go.jp/kaigirep/hakusho/h25/honbun/1b_0s_01_00.htm
+
+[13] 気象庁, "日本の気候変動2025 —大気と陸・海洋に関する観測・予測評価報告書— 第5章," 2025. https://www.data.jma.go.jp/cpdinfo/ccj/2025/html_honpen/cc2025_honpen_5.html
+
+[14] 気象庁, "台風の平年値," https://www.data.jma.go.jp/yoho/typhoon/statistics/average/average.html （2026年10月15日閲覧）
+
+[15] 総務省, "令和6年版 情報通信白書 第I部 第1章 第2節 移動通信（携帯電話等）," 2024. https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r06/html/nd112120.html
 
 データセット：AIDER（Zenodo，CC BY 4.0）https://doi.org/10.5281/zenodo.3888300
 
