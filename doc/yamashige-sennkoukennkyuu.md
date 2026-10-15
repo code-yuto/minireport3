@@ -10,7 +10,7 @@
 ### 論文1
 - タイトル：Confident Learning: Estimating Uncertainty in Dataset Labels
 - 著者・年：Northcutt, Jiang, Chuang (2021) / Journal of Artificial Intelligence Research 70
-- URL / DOI：https://doi.org/10.1613/jair.1.12125 （※要確認）
+- URL / DOI：https://doi.org/10.1613/jair.1.12125 
 - 何をしたか：モデルの予測ではなくラベルの質に注目し、データセット中のラベルの誤りを特定・除去する手法（Confident Learning）を提案した。
 - 結果（数字があれば数字で）：CIFARでは比較した7手法を上回り、ImageNetでは「missile」の画像のうち645枚が親クラス「projectile」として誤ってラベル付けされていると推定した。
 - 自分のテーマとの違い：論文は単一ドメイン内でのノイズ除去を扱っている。本研究は、(a) 背景という近道の影響、(b) 美術館から実環境への持ち出し（ドメインシフト）での効果を検証する。また、ラベルを新たに付ける段階ではなく、既存ラベルの点検に焦点を当てる。
