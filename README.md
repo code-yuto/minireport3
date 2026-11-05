@@ -36,6 +36,7 @@
 | 第2週 | 2026/10/8（木） | [giziroku/week02_2026-10-08.md](giziroku/week02_2026-10-08.md) |
 | 第3回 | 2026/10/15（木） | [giziroku/week03_2026-10-15.md](giziroku/week03_2026-10-15.md) |
 | 第4週 | 2026/10/22（木） | [giziroku/week04_2026-10-22.md](giziroku/week04_2026-10-22.md) |
+| 第5週 | 2026/11/5（木） | [giziroku/week05_2026-11-05.md](giziroku/week05_2026-11-05.md) |
 
 ### 議事録のルール
 - 提出用の議事録は、これまでどおり **Word で作る**（提出はWordが必須）
