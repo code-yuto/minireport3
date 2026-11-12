@@ -1,0 +1,8 @@
+# PyTorch は CPU 版で動く。入れ方:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+#   pip install -r requirements.txt
+torch
+torchvision
+scikit-learn
+numpy
+pillow
