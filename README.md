@@ -28,6 +28,28 @@
 ## フォルダ
 - `survey/` サーベイ論文のまとめ（1人1ファイル：`survey/<名前>.md`）
 - `giziroku/` 毎週の議事録（ゼミ活動報告書）
+- `scripts/` 便利なスクリプト（データとコードを取ってくる `fetch_external.ps1` など）
+- `experiments/` 実験のプログラムと結果（`experiments/feasibility/` は実現できるかのテスト）
+- `data/raw/` データセット本体（GitHub には入れない。下の手順で各自取ってくる）
+- `external/` 先行研究のコード（GitHub には入れない。下の手順で各自取ってくる）
+
+## データセットと先行研究のコードの取り方
+データセットと先行研究のコードは、大きかったりライセンスが書かれていなかったりするので GitHub に入れていない。代わりに、取ってくるスクリプトを管理している。pull したあと、リポジトリの一番上で1回だけ実行する。
+
+```powershell
+.\scripts\fetch_external.ps1             # 全部（AIDER は約276MB、数分かかる）
+.\scripts\fetch_external.ps1 -SkipData   # コードだけ
+```
+
+| 置き場所 | 中身 | 入手元 | ライセンス |
+| --- | --- | --- | --- |
+| `data/raw/AIDER/` | 災害空撮データセット AIDER（6,433枚） | [Zenodo](https://doi.org/10.5281/zenodo.3888300) | CC BY 4.0（使うときは EmergencyNet の論文を引用） |
+| `external/EmergencyNet/` | 論文6 EmergencyNet のコードと学習済みの重み | [GitHub](https://github.com/ckyrkou/EmergencyNet) | 記載なし |
+| `external/ddnn/` | 論文2 DDNN のコード | [GitHub](https://github.com/kunglab/ddnn) | 記載なし |
+| `external/noscope/` | 論文1 NoScope のコード | [GitHub](https://github.com/stanford-futuredata/noscope) | 記載なし |
+| `external/zhao-plastic-mulch/` | 論文4 Zhao らのコード | [Zenodo](https://doi.org/10.5281/zenodo.21635293) | MIT |
+
+論文の番号は `doc/watanabe-sennkoukennkyuu.md` と同じ。スクリプトが実行できないと言われたら、`powershell -ExecutionPolicy Bypass -File .\scripts\fetch_external.ps1` で実行する。
 
 ## 議事録
 | 回 | 日付 | ファイル |
