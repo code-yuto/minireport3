@@ -15,6 +15,8 @@
 2. **回線が足りないとき**：差は分単位になる。しかし効いているのは順番ではなく「平常の画像を実質送らないこと」で、それなら最初から送らない方式に勝てない。さらに待ち時間の項が、被災画像全体を遅らせる。
 3. **どちらの場合も**：使う予定のデータセット AIDER では、画像の来方（被災画像が続けて来る）を再現できず、評価の結果を信じられない。
 
+待ち時間と被災度を和ではなく積にしても同じで、速さだけなら被災度の順で十分になる（5.）。ただし被災度の順は既存の方式そのものである。
+
 ---
 
 ## 1. 記号と前提
@@ -134,7 +136,44 @@ $$
 - 計画書の「本研究の限界」には「画像の違いが結果に効くのは、AIの読み落としの率を通してだけ」と書いたが、これは誤り。画像の来方も結果に効く。
 - 人工的に来方を作る（被災地の上でかたまって来るようにする）ことはできるが、どのくらいかたまるかの根拠になる実データがない。
 
-## 5. 残せるものと、作り直すもの
+## 5. 積にした場合（被災度 × 待ち時間）と、「被災度の順で十分では？」
+
+### 5.1 積にした優先度
+
+$$
+P_i(t) = s_i \,(t - a_i)
+$$
+
+これは、待つほど優先度が上がり、その上がる速さをクラスごとに変える方式（Kleinrock の delay-dependent priority [15]）で、上がる速さを $s_i$ にしたものにあたる。
+
+**和との違い**：2枚の画像 $i$（被災度が高い）と $j$（低い）の大小を比べる。
+
+| | 和 $s + \alpha w$ | 積 $s \times w$ |
+| --- | --- | --- |
+| $j$ が $i$ を追い越す条件 | 待ち時間の差が $\frac{s_i - s_j}{\alpha}$ 秒を超える（**差**で決まる） | 待ち時間の比が $\frac{s_i}{s_j}$ 倍を超える（**比**で決まる） |
+| 例：$s_i = 0.99$、$s_j = 0.01$ | $j$ が約 $0.98/\alpha$ 秒長く待てば追い越す | $j$ が $i$ の **99倍**長く待たないと追い越せない |
+| $s_j = 0$（完全に読み落とした） | いつかは送られる | **優先度がずっと0で、ほかに待つ画像がある限り送られない** |
+
+積は、読み落とした画像（$s$ が小さい）ほど救いにくい。$s$ が0に近い画像は、被災度の順とほぼ同じ扱いになる。
+
+### 5.2 回線の状況ごとの比較
+
+| | 回線が足りている（$\rho < 1$） | 回線が足りない（$\rho > 1$） |
+| --- | --- | --- |
+| 被災度の順 | 被災画像は早い。読み落とした画像も、少し遅れて**必ず届く** | 被災画像は早い。読み落とした画像は届かない |
+| 和（計画書の提案） | 被災度の順と到着順の間 | 先に行けるのは最大 $1/\alpha$ 秒。被災画像全体の待ち時間が増え続ける（3.） |
+| 積 | 被災度の順と到着順の間 | 新しく来る画像は待ち時間が短く、比で負け続けるので、多くは被災度の順に近づく。$s \approx 0$ の画像は届かない |
+
+### 5.3 被災度の順で十分か
+
+**速さだけを見るなら、被災度の順で十分である。** 和や積は、被災度の順と到着順の間を取るための調整にすぎない。そして、その調整が要る場面がない。
+
+- **回線が足りているとき**：被災度の順でも、読み落とした画像はいずれ必ず届く。計画書の条件（$\rho = 0.9$）では、読み落とした画像（平常として扱われる）の平均待ち時間は $W_2 = 2.77$ 秒で、到着順（2.03秒）より **0.74秒** 遅れるだけ（2.の表）。取り残しの問題は、そもそも起きていない。
+- **回線が足りないとき**：読み落とした画像を救おうとすると、被災画像全体が遅れる（3.）。救わないなら、被災度の順そのもの。どちらにしても、和や積で得をする場面がない。
+
+ただし、被災度の順に送ることは、画像の中身で優先して送る既存の方式（[6][8]）そのもので、新規性がない。読み落としの問題を解くには、順番ではなく、**読み落とさない（エッジAIの精度を上げる）**か、**全部を小さくして送り、本部で見直す**など、別の方向が要る。
+
+## 6. 残せるものと、作り直すもの
 
 | 残せるもの | 作り直すもの |
 | --- | --- |
@@ -150,11 +189,17 @@ $$
 
 [4] C. Kyrkou, T. Theocharides, "EmergencyNet: Efficient Aerial Image Classification for Drone-Based Emergency Monitoring Using Atrous Convolutional Feature Fusion," IEEE JSTARS, Vol. 13, 2020, pp. 1687-1699. https://doi.org/10.1109/jstars.2020.2969809 （査読あり）
 
+[6] T. Zhang, A. Chowdhery, P. Bahl, K. Jamieson, S. Banerjee, "The Design and Implementation of a Wireless Video Surveillance System," MobiCom 2015, pp. 426-438. https://doi.org/10.1145/2789168.2790123 （査読あり）
+
 [7] A. R. Desher, A. Al-Shuwaili, "Reliable Layered Transmission and Task Offloading in UAV-Assisted MEC Networks for Disaster Relief," Drones, Vol. 10, No. 3, 2026, 167. https://doi.org/10.3390/drones10030167 （査読あり）
+
+[8] J. T. B. Fajardo, K. Yasumoto, M. Ito, "Content-based data prioritization for fast disaster images collection in delay tolerant network," ICMU 2014, pp. 147-152. https://doi.org/10.1109/ICMU.2014.6799086 （査読あり）
 
 [10] A. Cobham, "Priority Assignment in Waiting Line Problems," Journal of the Operations Research Society of America, Vol. 2, No. 1, 1954, pp. 70-76. https://doi.org/10.1287/opre.2.1.70 （査読あり）
 
 [14] 総務省, "令和6年版 情報通信白書 第I部 第1章 第2節 移動通信（携帯電話等）," 2024. https://www.soumu.go.jp/johotsusintokei/whitepaper/ja/r06/html/nd112120.html
+
+[15] L. Kleinrock, "A Delay Dependent Queue Discipline," Naval Research Logistics Quarterly, Vol. 11, No. 3-4, 1964, pp. 329-341. https://doi.org/10.1002/nav.3800110306 （査読あり。本文は未読）
 
 [16] H. M. Goldberg, "Analysis of the Earliest Due Date Scheduling Rule in Queueing Systems," Mathematics of Operations Research, Vol. 2, No. 2, 1977, pp. 145-154. https://doi.org/10.1287/moor.2.2.145 （査読あり）
 
