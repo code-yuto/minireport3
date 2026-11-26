@@ -92,6 +92,31 @@ def main() -> None:
         MISS = miss
         print(f"--- miss rate {miss:.2f}")
         run_table(rhos)
+    MISS = 0.05
+    print("--- alpha sweep (section 5.7)")
+    sweep_alpha()
+
+
+def sweep_alpha() -> None:
+    """Section 5.7: 20 seeds, several 1/alpha, high miss rates and heavy congestion."""
+    global MISS, ALPHA_INV
+    seeds = range(20)
+    for miss in (0.2, 0.4):
+        MISS = miss
+        for rho in (1.2, 1.5, 2.0):
+            fifo = np.array([simulate(rho, "fifo", s)["p90"] for s in seeds])
+            rows = [("fifo", None), ("sev", None)] + [("sum", a) for a in (5, 10, 30, 60, 120)]
+            for policy, alpha_inv in rows:
+                if alpha_inv is not None:
+                    ALPHA_INV = alpha_inv
+                v = np.array([simulate(rho, policy, s)["p90"] for s in seeds])
+                d = v - fifo
+                label = policy if alpha_inv is None else f"sum 1/a={alpha_inv}"
+                print(
+                    f"miss={miss:.2f} rho={rho} {label:<13} p90={v.mean():6.1f}±{v.std(ddof=1):4.1f}s "
+                    f"vs_fifo={d.mean():+6.1f}±{d.std(ddof=1):4.1f}s"
+                )
+    ALPHA_INV = 10.0
 
 
 def run_table(rhos: tuple[float, ...]) -> None:
