@@ -3,7 +3,7 @@
 One shared link, non-preemptive, every image takes the same time to send.
 A 10-minute flight; images arrive as a Poisson process (2 images/s); 30% are disaster images.
 Assumed severity s given by the edge AI (not measured values):
-  disaster: 90% s=0.9 (sure), 5% s=0.5 (unsure), 5% s=0.05 (missed)
+  disaster: 90% s=0.9 (sure), 5% s=0.5 (unsure), 5% s=0.05 (missed)  -- miss rate also 20%, 40%
   normal:   95% s=0.05,        5% s=0.5
 After the flight ends, the queue keeps draining until every queued image is sent.
 
@@ -25,6 +25,9 @@ DROP_BELOW = 0.1
 SEEDS = range(5)
 
 
+MISS = 0.05        # share of disaster images the edge AI misses (s=0.05); 5% are unsure (s=0.5)
+
+
 def make_arrivals(seed: int) -> list[tuple[float, bool, float]]:
     rng = np.random.default_rng(seed)
     t, arrivals = 0.0, []
@@ -35,7 +38,7 @@ def make_arrivals(seed: int) -> list[tuple[float, bool, float]]:
         is_disaster = rng.random() < P_DISASTER
         u = rng.random()
         if is_disaster:
-            s = 0.9 if u < 0.9 else (0.5 if u < 0.95 else 0.05)
+            s = 0.9 if u < 1 - MISS - 0.05 else (0.5 if u < 1 - MISS else 0.05)
         else:
             s = 0.05 if u < 0.95 else 0.5
         arrivals.append((t, is_disaster, s))
@@ -72,8 +75,11 @@ def simulate(rho: float, policy: str, seed: int) -> dict[str, float]:
     is_dis = np.array([x[1] for x in sent], dtype=bool)
     is_missed = is_dis & (np.array([x[2] for x in sent]) < DROP_BELOW)
     delay = finish - arrive
+    # 90% of ALL disaster images, counting dropped ones as never delivered (infinite delay)
+    all_dis_delay = np.sort(np.concatenate([delay[is_dis], np.full(n_disaster - int(is_dis.sum()), np.inf)]))
+    p90 = float(all_dis_delay[int(np.ceil(0.9 * n_disaster)) - 1])
     return {
-        "p90": float(np.percentile(delay[is_dis], 90)),
+        "p90": p90,
         "missed_mean": float(delay[is_missed].mean()) if is_missed.any() else float("nan"),
         "lost_pct": 100 * (n_disaster - int(is_dis.sum())) / n_disaster,
         "sent_pct": 100 * n / len(arrivals),
@@ -81,7 +87,15 @@ def simulate(rho: float, policy: str, seed: int) -> dict[str, float]:
 
 
 def main() -> None:
-    for rho in (0.9, 1.2, 3.0):
+    global MISS
+    for miss, rhos in ((0.05, (0.9, 1.2, 3.0)), (0.20, (0.9, 1.2)), (0.40, (0.9, 1.2))):
+        MISS = miss
+        print(f"--- miss rate {miss:.2f}")
+        run_table(rhos)
+
+
+def run_table(rhos: tuple[float, ...]) -> None:
+    for rho in rhos:
         for policy in ("fifo", "sev", "sum", "filter"):
             if rho == 3.0 and policy != "filter":
                 continue
